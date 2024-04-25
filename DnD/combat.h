@@ -23,6 +23,7 @@ private:
     int playerLastRoll;
     int enemyLastRoll;
     int round;
+    bool firstStep;
 
     int bonus();
 

@@ -181,7 +181,7 @@ void Entity::getHeart(int count)
 {
     if (count > health) {
         health = 0;
-    } else {
+    } else if (count >= 0) {
         health -= count;
     }
 }

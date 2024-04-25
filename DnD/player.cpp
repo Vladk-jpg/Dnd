@@ -133,7 +133,7 @@ void Player::useItem(int i)
 void Player::addExp(int incr)
 {
     exp += incr;
-    if (exp >= maxExp[lvl - 1]) {
+    while (exp >= maxExp[lvl - 1]) {
         exp -= maxExp[lvl - 1];
         lvl++;
         //прописать механизм повышения уровня

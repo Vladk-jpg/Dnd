@@ -59,6 +59,7 @@ void Combat::handleRoll(int type, int roll)
                               + QString::number(enemyLastRoll));
                 if (playerLastRoll >= enemyLastRoll) {
                     yourTurn = true;
+                    firstStep = true;
                     emit sendText(
                         "\nВаша инициатива больше, поэтому вы ходите первым \nБросайте D20 на "
                         "попадание");
@@ -66,6 +67,7 @@ void Combat::handleRoll(int type, int roll)
                 } else {
                     emit sendText("\nВаша инициатива меньше, первым ходит соперник");
                     yourTurn = false;
+                    firstStep = false;
                     emit enemyRoll(needRoll);
                 }
                 phase = HIT_ROLL;
@@ -85,6 +87,9 @@ void Combat::handleRoll(int type, int roll)
                     yourTurn = false;
                     needRoll = D20;
                     emit enemyRoll(needRoll);
+                    if (!firstStep) {
+                        round++;
+                    }
                 }
             } else {
                 emit sendText("\nРаунд " + QString::number(round) + ". Атака " + enemy->getName()
@@ -99,6 +104,9 @@ void Combat::handleRoll(int type, int roll)
                     emit sendText("Промах \n\nБросайте D20 на попадание");
                     yourTurn = true;
                     needRoll = D20;
+                    if (firstStep) {
+                        round++;
+                    }
                 }
             }
         } else if (phase == DAMAGE_ROLL) {
@@ -120,6 +128,9 @@ void Combat::handleRoll(int type, int roll)
                     needRoll = D20;
                     emit enemyRoll(needRoll);
                 }
+                if (!firstStep) {
+                    round++;
+                }
             } else {
                 player->getHeart(roll + enemy->getMod(STRENGTH));
                 emit sendText("Вам нанесли " + QString::number(roll) + " + "
@@ -134,11 +145,17 @@ void Combat::handleRoll(int type, int roll)
                     needRoll = D20;
                     emit sendText("\nБросайте D20 на попадание");
                 }
+                if (firstStep) {
+                    round++;
+                }
             }
         }
+
     } else {
-        emit sendText("\n---------------------------------\nВы бросили не ту кость!(D"
-                      + QString::number(type) + ")\nВам нужен D" + QString::number(needRoll)
-                      + "\n---------------------------------\n");
+        if (phase != NO_ROLL) {
+            emit sendText("\n---------------------------------\nВы бросили не ту кость!(D"
+                          + QString::number(type) + ")\nВам нужен D" + QString::number(needRoll)
+                          + "\n---------------------------------\n");
+        }
     }
 }

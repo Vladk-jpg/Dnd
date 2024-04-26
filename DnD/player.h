@@ -5,6 +5,7 @@
 #include <QVector>
 #include "constants.h"
 #include "entity.h"
+#include "lvlupform.h"
 
 class Player : public Entity
 {
@@ -31,6 +32,11 @@ private:
     int lvl = 1;
     int exp = 0;
     QVector<int> maxExp;
+    LvlUpForm *lvlUpForm = new LvlUpForm;
+private slots:
+    void handleMod(int mod);
+signals:
+    void sendText(QString);
 };
 
 #endif // PLAYER_H

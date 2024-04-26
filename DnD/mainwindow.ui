@@ -886,7 +886,7 @@ border-radius: 5px;
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>490</y>
+      <y>530</y>
       <width>271</width>
       <height>41</height>
      </rect>
@@ -914,7 +914,7 @@ border-radius: 5px;</string>
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>540</y>
+      <y>580</y>
       <width>271</width>
       <height>41</height>
      </rect>
@@ -942,7 +942,7 @@ border-radius: 5px;</string>
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>590</y>
+      <y>630</y>
       <width>271</width>
       <height>41</height>
      </rect>
@@ -995,6 +995,34 @@ color: white;</string>
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
+   <widget class="QLabel" name="damage">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>480</y>
+      <width>271</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>CaskaydiaCove Nerd Font</family>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border: 2px solid #6b6b6b;
+background-color: #e8e8e8;
+color: black;
+border-radius: 5px;</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
    <zorder>label_4</zorder>
    <zorder>background</zorder>
    <zorder>dialog</zorder>
@@ -1023,6 +1051,7 @@ color: white;</string>
    <zorder>race</zorder>
    <zorder>gameClass</zorder>
    <zorder>Title</zorder>
+   <zorder>damage</zorder>
   </widget>
  </widget>
  <resources/>

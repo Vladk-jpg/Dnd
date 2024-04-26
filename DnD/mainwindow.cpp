@@ -30,6 +30,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(this, &MainWindow::DiceRolled, combat, &Combat::handleRoll);
     connect(combat, &Combat::enemyRoll, this, &MainWindow::handleEnemyRoll);
     connect(combat, &Combat::gameOver, this, &MainWindow::handleGameOver);
+    connect(player, &Player::sendText, this, &MainWindow::handleTextReceived);
 
     ui->dialog->setText("Добро пожаловать в увлекательный мир \"Dungeons & Data\"!\nСперва давайте "
                         "создадим персонажа:\nВведите \"/create\"");
@@ -175,6 +176,7 @@ void MainWindow::updateWindow()
     ui->name->setText(player->getName());
     ui->gameClass->setText(player->getGameClass());
     ui->race->setText(player->getRace());
+    ui->damage->setText("Урон: D" + QString::number(player->getDamage()));
 
     ui->stats->setColumnCount(1);
     ui->stats->setItem(0, 0, new QTableWidgetItem(QString::number(player->getMod(STRENGTH))));
@@ -207,4 +209,24 @@ void MainWindow::handleEnemyRoll(int d)
 void MainWindow::handleGameOver()
 {
     ui->dialog->append("Игра окончена");
+}
+
+void MainWindow::on_useButton_clicked()
+{
+    QList<QTableWidgetItem *> selectedItems = ui->inventory->selectedItems();
+    if (!selectedItems.isEmpty()) {
+        int index = ui->inventory->currentRow();
+        int type = player->inventory[index]->getType();
+        qDebug() << index;
+        player->useItem(index);
+        if (type == HEAL) {
+            ui->dialog->append("Вы восстановили " + QString::number(player->inventory[index]->use())
+                               + " здоровья");
+            player->inventory.removeAt(index);
+        } else {
+            ui->dialog->append("Вы экипировали " + player->inventory[index]->getName());
+        }
+        ui->inventory->clearSelection();
+        updateWindow();
+    }
 }

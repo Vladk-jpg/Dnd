@@ -21,6 +21,14 @@ void CreationForm::on_createButton_clicked()
     QString race = ui->race->currentText();
     QString gameClass = ui->gameClass->currentText();
     int str = 0, dex = 0, con = 0, intel = 0, wis = 0, cha = 0, health = 0;
+
+    str = QRandomGenerator::global()->bounded(-2, 3);
+    dex = QRandomGenerator::global()->bounded(-2, 3);
+    con = QRandomGenerator::global()->bounded(-2, 3);
+    intel = QRandomGenerator::global()->bounded(-2, 3);
+    wis = QRandomGenerator::global()->bounded(-2, 3);
+    cha = QRandomGenerator::global()->bounded(-2, 3);
+
     if (gameClass == "Варвар") {
         health = D12;
     } else if (gameClass == "Бард") {
@@ -33,8 +41,11 @@ void CreationForm::on_createButton_clicked()
         health = D10;
         player->inventory.push_back(world.longSword);
         player->inventory.push_back(world.chain);
+        player->inventory.push_back(world.SmallHealPotion);
         player->setDamage(player->inventory[0]->use());
         player->setDefence(player->inventory[1]->use());
+        str = 2;
+        intel = -3;
     } else if (gameClass == "Монах") {
         health = D8;
     } else if (gameClass == "Паладин") {
@@ -50,12 +61,6 @@ void CreationForm::on_createButton_clicked()
     } else if (gameClass == "Волшебник") {
         health = D6;
     }
-    str = QRandomGenerator::global()->bounded(-2, 3);
-    dex = QRandomGenerator::global()->bounded(-2, 3);
-    con = QRandomGenerator::global()->bounded(-2, 3);
-    intel = QRandomGenerator::global()->bounded(-2, 3);
-    wis = QRandomGenerator::global()->bounded(-2, 3);
-    cha = QRandomGenerator::global()->bounded(-2, 3);
 
     //раса
     if (race == "Человек") {

@@ -1,6 +1,9 @@
 #include "player.h"
 
-Player::Player() = default;
+Player::Player()
+{
+    connect(lvlUpForm, &LvlUpForm::Choose, this, &Player::handleMod);
+}
 
 Player::Player(QString name,
                QString race,
@@ -31,6 +34,7 @@ Player::Player(QString name,
         maxExp.push_back(var);
         var += DEF_EXP;
     }
+    connect(lvlUpForm, &LvlUpForm::Choose, this, &Player::handleMod);
 }
 
 void Player::setup(Player *other)
@@ -136,6 +140,12 @@ void Player::addExp(int incr)
     while (exp >= maxExp[lvl - 1]) {
         exp -= maxExp[lvl - 1];
         lvl++;
-        //прописать механизм повышения уровня
+        lvlUpForm->show();
     }
+}
+
+void Player::handleMod(int mod)
+{
+    setMod(mod, getMod(mod) + 1);
+    emit sendText("Ваша характеристика №" + QString::number(mod) + " повысилась на 1");
 }

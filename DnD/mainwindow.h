@@ -42,6 +42,8 @@ private slots:
     void handleEnemyRoll(int);
     void handleGameOver();
 
+    void on_useButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     Menu *menu;

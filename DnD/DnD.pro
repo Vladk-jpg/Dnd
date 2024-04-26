@@ -15,6 +15,7 @@ SOURCES += \
     dice.cpp \
     entity.cpp \
     item.cpp \
+    lvlupform.cpp \
     main.cpp \
     mainwindow.cpp \
     menu.cpp \
@@ -32,6 +33,7 @@ HEADERS += \
     dice.h \
     entity.h \
     item.h \
+    lvlupform.h \
     mainwindow.h \
     menu.h \
     player.h \
@@ -42,6 +44,7 @@ HEADERS += \
 
 FORMS += \
     creationform.ui \
+    lvlupform.ui \
     mainwindow.ui \
     menu.ui
 

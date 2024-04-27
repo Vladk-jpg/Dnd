@@ -121,6 +121,7 @@ void Combat::handleRoll(int type, int roll)
                     player->addExp(enemy->getDanger() * 200);
                     emit sendText("Вы получили " + QString::number(enemy->getDanger() * 200)
                                   + " опыта");
+                    emit fightEnd(enemy->getName());
                     //дать рандомную награду
                 } else {
                     phase = HIT_ROLL;

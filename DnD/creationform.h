@@ -26,7 +26,7 @@ private slots:
 
 private:
     Ui::CreationForm *ui;
-    World world;
+    World *world;
     Player *player = new Player;
 
 signals:

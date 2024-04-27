@@ -9,6 +9,8 @@ enum itemTypes { HEAL, DAMAGE, DEFENCE };
 
 enum battleRolls { INITIATIVE_ROLL, HIT_ROLL, DAMAGE_ROLL, NO_ROLL };
 
+enum placeTypes { CITY, BUILDING, ENVIRONMENT };
+
 #define DEFAULT_ARM 10;
 
 const int D4 = 4;

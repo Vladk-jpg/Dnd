@@ -5,6 +5,7 @@ CreationForm::CreationForm(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::CreationForm)
 {
+    world = new World;
     ui->setupUi(this);
     //setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
     setWindowFlags(Qt::FramelessWindowHint | Qt::Window | Qt::WindowStaysOnTopHint);
@@ -39,9 +40,9 @@ void CreationForm::on_createButton_clicked()
         health = D8;
     } else if (gameClass == "Воин") {
         health = D10;
-        player->inventory.push_back(world.longSword);
-        player->inventory.push_back(world.chain);
-        player->inventory.push_back(world.SmallHealPotion);
+        player->inventory.push_back(world->longSword);
+        player->inventory.push_back(world->chain);
+        player->inventory.push_back(world->SmallHealPotion);
         player->setDamage(player->inventory[0]->use());
         player->setDefence(player->inventory[1]->use());
         str = 2;

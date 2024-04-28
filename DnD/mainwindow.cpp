@@ -12,7 +12,9 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     showFullScreen();
+    player = new Player;
     combat = new Combat(player);
+    world = new World(player, combat);
 
     ui->background->setScaledContents(true);
     ui->background->resize(size());
@@ -31,6 +33,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(combat, &Combat::enemyRoll, this, &MainWindow::handleEnemyRoll);
     connect(combat, &Combat::gameOver, this, &MainWindow::handleGameOver);
     connect(player, &Player::sendText, this, &MainWindow::handleTextReceived);
+    connect(this, &MainWindow::SendCommand, world, &World::handleCommand);
+    connect(world, &World::sendText, this, &MainWindow::handleTextReceived);
+    connect(world, &World::createPlayer, this, &MainWindow::handleCreate);
 
     ui->dialog->setText("Добро пожаловать в увлекательный мир \"Dungeons & Data\"!\nСперва давайте "
                         "создадим персонажа:\nВведите \"/create\"");
@@ -131,8 +136,8 @@ void MainWindow::handlePlayerCreate(Player *newPlayer)
     player->setup(newPlayer);
     form->close();
     this->setEnabled(true);
+    isCreate = true;
     updateWindow();
-    combat->start(world->goblin);
 }
 
 void MainWindow::on_menuButton_clicked()
@@ -157,12 +162,7 @@ void MainWindow::on_enterButton_clicked()
     if (!text.isEmpty()) {
         ui->dialog->append(text);
         ui->inputLine->clear();
-
-        if (gameState == CREATION) {
-            form->show();
-            this->setEnabled(false);
-            gameState = DIALOG;
-        }
+        emit SendCommand(text);
     }
 }
 
@@ -196,7 +196,9 @@ void MainWindow::updateWindow()
 void MainWindow::handleTextReceived(QString text)
 {
     ui->dialog->append(text);
-    updateWindow();
+    if (isCreate) {
+        updateWindow();
+    }
 }
 
 void MainWindow::handleEnemyRoll(int d)
@@ -209,6 +211,12 @@ void MainWindow::handleEnemyRoll(int d)
 void MainWindow::handleGameOver()
 {
     ui->dialog->append("Игра окончена");
+}
+
+void MainWindow::handleCreate()
+{
+    form->show();
+    this->setEnabled(false);
 }
 
 void MainWindow::on_useButton_clicked()
@@ -229,4 +237,16 @@ void MainWindow::on_useButton_clicked()
         ui->inventory->clearSelection();
         updateWindow();
     }
+}
+
+void MainWindow::on_infoButton_clicked()
+{
+    QMessageBox::information(this,
+                             "Информация",
+                             "/create - cоздать персонажа\n"
+                             "/info - информация о том, куда можно пойти\n"
+                             "/go (название места) - отправиться в выбранное место\n"
+                             "/talk (имя) - поговорить с \"имя\"\n"
+                             "/fight (имя) - сразиться с \"имя\"\n"
+                             "/choose (число) - выбрать вариант ответа");
 }

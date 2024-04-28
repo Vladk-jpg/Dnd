@@ -5,6 +5,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsTextItem>
 #include <QMainWindow>
+#include <QMessageBox>
 
 #include "armor.h"
 #include "combat.h"
@@ -41,24 +42,29 @@ private slots:
     void handleTextReceived(QString);
     void handleEnemyRoll(int);
     void handleGameOver();
+    void handleCreate();
 
     void on_useButton_clicked();
+
+    void on_infoButton_clicked();
 
 private:
     Ui::MainWindow *ui;
     Menu *menu;
     CreationForm *form;
     Dice *dice;
-    World *world = new World;
+    World *world;
     bool canRoll = true;
     QPair<int, int> currRoll;
     QGraphicsScene *scene;
-    Player *player = new Player();
+    Player *player;
     bool isFight = false;
     int gameState{CREATION};
     QTimer timer;
     Combat *combat;
+    bool isCreate = false;
 signals:
     void DiceRolled(int, int);
+    void SendCommand(QString);
 };
 #endif // MAINWINDOW_H

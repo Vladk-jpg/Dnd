@@ -34,6 +34,7 @@ signals:
     void sendText(QString);
     void enemyRoll(int);
     void gameOver();
+    void fightEnd(QString);
 };
 
 #endif // COMBAT_H

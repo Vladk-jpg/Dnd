@@ -1,6 +1,7 @@
 #ifndef COMBAT_H
 #define COMBAT_H
 
+#include <QColor>
 #include <QObject>
 #include "dice.h"
 #include "entity.h"
@@ -31,7 +32,7 @@ public slots:
     void handleRoll(int, int);
 
 signals:
-    void sendText(QString);
+    void sendText(QString, QColor);
     void enemyRoll(int);
     void gameOver();
     void fightEnd(QString);

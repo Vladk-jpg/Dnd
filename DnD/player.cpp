@@ -147,5 +147,6 @@ void Player::addExp(int incr)
 void Player::handleMod(int mod)
 {
     setMod(mod, getMod(mod) + 1);
-    emit sendText("Ваша характеристика №" + QString::number(mod) + " повысилась на 1");
+    emit sendText("Ваша характеристика №" + QString::number(mod + 1) + " повысилась на 1",
+                  Qt::darkGreen);
 }

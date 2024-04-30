@@ -36,7 +36,7 @@ private:
 private slots:
     void handleMod(int mod);
 signals:
-    void sendText(QString);
+    void sendText(QString, QColor);
 };
 
 #endif // PLAYER_H

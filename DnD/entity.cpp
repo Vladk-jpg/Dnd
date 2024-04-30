@@ -9,7 +9,9 @@ Entity::Entity(QString name,
                int intel,
                int wis,
                int cha,
-               int danger)
+               int danger,
+               int defence,
+               int damage)
     : strength(str)
     , dexterity(dex)
     , constitution(con)
@@ -21,6 +23,8 @@ Entity::Entity(QString name,
     , danger(danger)
     , health(health)
     , maxHealth(health)
+    , defence(defence)
+    , damage(damage)
 {}
 
 void Entity::setup(Entity *other)
@@ -49,7 +53,9 @@ void Entity::setup(QString name,
                    int intel,
                    int wis,
                    int cha,
-                   int danger)
+                   int danger,
+                   int defence,
+                   int damage)
 {
     strength = str;
     dexterity = dex;
@@ -62,6 +68,8 @@ void Entity::setup(QString name,
     this->health = health;
     maxHealth = health;
     this->danger = danger;
+    this->defence = defence;
+    this->damage = damage;
 }
 
 void Entity::setDefence(int def)

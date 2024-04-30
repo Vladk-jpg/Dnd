@@ -24,6 +24,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->inventory->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     ui->experienceBar->setTextVisible(false);
 
+    cursor = ui->dialog->textCursor();
+    cursor.setCharFormat(format);
+
     connect(menu, &Menu::Close, this, &MainWindow::closeWindow);
     connect(menu, &Menu::Continue, this, &MainWindow::closeMenu);
     connect(dice, &Dice::rolled, this, &MainWindow::handleDiceRoll);
@@ -37,8 +40,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(world, &World::sendText, this, &MainWindow::handleTextReceived);
     connect(world, &World::createPlayer, this, &MainWindow::handleCreate);
 
-    ui->dialog->setText("Добро пожаловать в увлекательный мир \"Dungeons & Data\"!\nСперва давайте "
-                        "создадим персонажа:\nВведите \"/create\"");
+    format.setForeground(QColor("black"));
+    cursor.insertText("Добро пожаловать в увлекательный мир \"Dungeons & Data\"!\nСперва давайте "
+                      "создадим персонажа:\nВведите \"/create\"\n");
 }
 
 MainWindow::~MainWindow()
@@ -138,6 +142,11 @@ void MainWindow::handlePlayerCreate(Player *newPlayer)
     this->setEnabled(true);
     isCreate = true;
     updateWindow();
+
+    format.setForeground(QColor(Qt::darkGreen));
+    cursor.setCharFormat(format);
+    cursor.insertText("Вы благополучно создали персонажа\n");
+    ui->dialog->ensureCursorVisible();
 }
 
 void MainWindow::on_menuButton_clicked()
@@ -160,7 +169,28 @@ void MainWindow::on_enterButton_clicked()
 {
     QString text = ui->inputLine->text();
     if (!text.isEmpty()) {
-        ui->dialog->append(text);
+        ui->dialog->clear();
+        format.setForeground(QColor(Qt::darkGray));
+        cursor.setCharFormat(format);
+        cursor.insertText(text + '\n');
+        ui->dialog->ensureCursorVisible();
+
+        ui->inputLine->clear();
+        emit SendCommand(text);
+    }
+}
+
+void MainWindow::on_inputLine_returnPressed()
+{
+    QString text = ui->inputLine->text();
+    if (!text.isEmpty()) {
+        ui->dialog->clear();
+
+        format.setForeground(QColor(Qt::darkGray));
+        cursor.setCharFormat(format);
+        cursor.insertText(text + '\n');
+        ui->dialog->ensureCursorVisible();
+
         ui->inputLine->clear();
         emit SendCommand(text);
     }
@@ -193,9 +223,14 @@ void MainWindow::updateWindow()
     }
 }
 
-void MainWindow::handleTextReceived(QString text)
+void MainWindow::handleTextReceived(QString text, QColor color)
 {
-    ui->dialog->append(text);
+    qDebug() << color;
+    format.setForeground(color);
+    cursor.setCharFormat(format);
+    cursor.insertText(text);
+
+    ui->dialog->verticalScrollBar()->setValue(ui->dialog->verticalScrollBar()->maximum());
     if (isCreate) {
         updateWindow();
     }
@@ -210,7 +245,10 @@ void MainWindow::handleEnemyRoll(int d)
 
 void MainWindow::handleGameOver()
 {
-    ui->dialog->append("Игра окончена");
+    format.setForeground(QColor(Qt::red));
+    cursor.setCharFormat(format);
+    cursor.insertText("\nИгра окончена\n");
+    ui->dialog->ensureCursorVisible();
 }
 
 void MainWindow::handleCreate()
@@ -228,14 +266,19 @@ void MainWindow::on_useButton_clicked()
         qDebug() << index;
         player->useItem(index);
         if (type == HEAL) {
-            ui->dialog->append("Вы восстановили " + QString::number(player->inventory[index]->use())
-                               + " здоровья");
+            format.setForeground(QColor(Qt::darkGreen));
+            cursor.setCharFormat(format);
+            cursor.insertText("Вы восстановили " + QString::number(player->inventory[index]->use())
+                              + " здоровья\n");
             player->inventory.removeAt(index);
         } else {
-            ui->dialog->append("Вы экипировали " + player->inventory[index]->getName());
+            format.setForeground(QColor(Qt::darkGreen));
+            cursor.setCharFormat(format);
+            cursor.insertText("Вы экипировали " + player->inventory[index]->getName() + "\n");
         }
         ui->inventory->clearSelection();
         updateWindow();
+        ui->dialog->ensureCursorVisible();
     }
 }
 

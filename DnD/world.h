@@ -1,6 +1,10 @@
 #ifndef WORLD_H
 #define WORLD_H
 
+#include <QFile>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include "armor.h"
 #include "combat.h"
 #include "dialog.h"
@@ -11,24 +15,12 @@
 
 struct Place
 {
-    Place(QString placeName,
-          QString descr,
-          QVector<QString> another,
-          QVector<QString> npcArr,
-          int placeType)
-    {
-        name = placeName;
-        description = descr;
-        exits = another;
-        npcs = npcArr;
-        type = placeType;
-    }
-
     QString name;
     QString description;
     QVector<QString> exits;
     QVector<QString> npcs;
     int type;
+    int lvl;
 };
 
 class World : public QObject
@@ -42,8 +34,6 @@ public:
 
     Armor *chain = new Armor("Кольчуга", "Защита 16", 16, DEFENCE);
     Armor *leatherArmor = new Armor("Кожаная броня", "Защита 12", 12, DEFENCE);
-
-    Entity *goblin = new Entity("Голлум", "Гоблин", 7, -1, 2, 0, 0, -1, -1, 4);
 
     Potion *SmallHealPotion = new Potion("Малое лечебное зелье", "Восстанавливает 4 HP", 4, HEAL);
 
@@ -65,11 +55,13 @@ private:
 
     int state{CREATION};
 
+    QMap<QString, Place *> parsePlaces(const QString &filePath);
+
 public slots:
     void handleCommand(QString command);
     void handleFightEnd(QString name);
 signals:
-    void sendText(QString);
+    void sendText(QString, QColor);
     void createPlayer();
 };
 

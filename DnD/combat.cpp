@@ -10,8 +10,9 @@ Combat::Combat(Player *player)
 void Combat::start(Entity *entity)
 {
     enemy->setup(entity);
-    emit sendText("Вы вступили в битву с \"" + enemy->getName()
-                  + "\"\nБросьте D20 чтобы определить, кто ходит первым");
+    emit sendText("Вы вступили в битву с ", Qt::black);
+    emit sendText(enemy->getName() + "\n", Qt::red);
+    emit sendText("Бросьте D20 чтобы определить, кто ходит первым\n", Qt::black);
     needRoll = D20;
     playerLastRoll = 0;
     enemyLastRoll = 0;
@@ -47,25 +48,28 @@ void Combat::handleRoll(int type, int roll)
             if (yourTurn) {
                 playerLastRoll = roll + player->getMod(DEXTERITY);
                 emit sendText("Ваша инициатива " + QString::number(roll) + " + "
-                              + QString::number(player->getMod(DEXTERITY)) + " = "
-                              + QString::number(playerLastRoll));
+                                  + QString::number(player->getMod(DEXTERITY)) + " = ",
+                              Qt::black);
+                emit sendText((QString::number(playerLastRoll)) + "\n", Qt::blue);
                 yourTurn = false;
                 emit enemyRoll(needRoll);
 
             } else {
                 enemyLastRoll = roll + enemy->getMod(DEXTERITY);
                 emit sendText("Инициатива врага " + QString::number(roll) + " + "
-                              + QString::number(enemy->getMod(DEXTERITY)) + " = "
-                              + QString::number(enemyLastRoll));
+                                  + QString::number(enemy->getMod(DEXTERITY)) + " = ",
+                              Qt::black);
+                emit sendText(QString::number(enemyLastRoll) + "\n", Qt::blue);
                 if (playerLastRoll >= enemyLastRoll) {
                     yourTurn = true;
                     firstStep = true;
                     emit sendText(
                         "\nВаша инициатива больше, поэтому вы ходите первым \nБросайте D20 на "
-                        "попадание");
+                        "попадание\n",
+                        Qt::black);
 
                 } else {
-                    emit sendText("\nВаша инициатива меньше, первым ходит соперник");
+                    emit sendText("\nВаша инициатива меньше, первым ходит соперник\n", Qt::black);
                     yourTurn = false;
                     firstStep = false;
                     emit enemyRoll(needRoll);
@@ -74,16 +78,19 @@ void Combat::handleRoll(int type, int roll)
             }
         } else if (phase == HIT_ROLL) {
             if (yourTurn) {
-                emit sendText("\nРаунд " + QString::number(round) + ". Атака игрока "
-                              + player->getName() + ":");
+                emit sendText("\nРаунд " + QString::number(round) + ". Атака игрока ", Qt::black);
+                emit sendText(player->getName(), Qt::darkGreen);
+                emit sendText(":\n", Qt::black);
+
                 playerLastRoll = roll + bonus();
                 if (playerLastRoll >= enemy->getDefence()) {
                     emit sendText("Попадание! Бросайте D" + QString::number(player->getDamage())
-                                  + " на атаку");
+                                      + " на атаку\n",
+                                  Qt::black);
                     needRoll = player->getDamage();
                     phase = DAMAGE_ROLL;
                 } else {
-                    emit sendText("Промах");
+                    emit sendText("Промах\n", Qt::black);
                     yourTurn = false;
                     needRoll = D20;
                     emit enemyRoll(needRoll);
@@ -92,16 +99,18 @@ void Combat::handleRoll(int type, int roll)
                     }
                 }
             } else {
-                emit sendText("\nРаунд " + QString::number(round) + ". Атака " + enemy->getName()
-                              + ":");
+                emit sendText("\nРаунд " + QString::number(round) + ". Атака ", Qt::black);
+                emit sendText(enemy->getName(), Qt::red);
+                emit sendText(":\n", Qt::black);
+
                 enemyLastRoll = roll + enemy->getMod(STRENGTH);
                 if (enemyLastRoll >= player->getDefence()) {
-                    emit sendText("Попадание!");
+                    emit sendText("Попадание!\n", Qt::black);
                     phase = DAMAGE_ROLL;
                     needRoll = enemy->getDamage();
                     emit enemyRoll(needRoll);
                 } else {
-                    emit sendText("Промах \n\nБросайте D20 на попадание");
+                    emit sendText("Промах \n\nБросайте D20 на попадание\n", Qt::black);
                     yourTurn = true;
                     needRoll = D20;
                     if (firstStep) {
@@ -113,16 +122,26 @@ void Combat::handleRoll(int type, int roll)
             if (yourTurn) {
                 enemy->getHeart(roll + bonus());
                 emit sendText("вы нанесли " + QString::number(roll) + " + "
-                              + QString::number(bonus()) + " = " + QString::number(roll + bonus())
-                              + " урона");
+                                  + QString::number(bonus()) + " = ",
+                              Qt::black);
+                emit sendText(QString::number(roll + bonus()), Qt::red);
+                emit sendText(" урона\n", Qt::black);
+
                 if (!enemy->isAlive()) {
                     phase = NO_ROLL;
-                    emit sendText("\nПоздравляю, вы победили \"" + enemy->getName() + "\"!");
+                    emit sendText("\nПоздравляю, вы победили ", Qt::darkGreen);
+                    //+  + "!");
+                    emit sendText(enemy->getName(), Qt::red);
+                    emit sendText(" !\n", Qt::darkGreen);
+
                     player->addExp(enemy->getDanger() * 200);
-                    emit sendText("Вы получили " + QString::number(enemy->getDanger() * 200)
-                                  + " опыта");
+                    emit sendText("Вы получили ", Qt::black);
+                    emit sendText(QString::number(enemy->getDanger() * 200) + " опыта\n",
+                                  Qt::magenta);
                     emit fightEnd(enemy->getName());
+
                     //дать рандомную награду
+
                 } else {
                     phase = HIT_ROLL;
                     yourTurn = false;
@@ -135,8 +154,11 @@ void Combat::handleRoll(int type, int roll)
             } else {
                 player->getHeart(roll + enemy->getMod(STRENGTH));
                 emit sendText("Вам нанесли " + QString::number(roll) + " + "
-                              + QString::number(enemy->getMod(STRENGTH)) + " = "
-                              + QString::number(roll + enemy->getMod(STRENGTH)) + " урона");
+                                  + QString::number(enemy->getMod(STRENGTH)) + " = ",
+                              Qt::black);
+                emit sendText(QString::number(roll + enemy->getMod(STRENGTH)), Qt::red);
+                emit sendText(" урона\n", Qt::black);
+
                 if (!player->isAlive()) {
                     phase = NO_ROLL;
                     emit gameOver();
@@ -144,7 +166,7 @@ void Combat::handleRoll(int type, int roll)
                     phase = HIT_ROLL;
                     yourTurn = true;
                     needRoll = D20;
-                    emit sendText("\nБросайте D20 на попадание");
+                    emit sendText("\nБросайте D20 на попадание\n", Qt::black);
                 }
                 if (firstStep) {
                     round++;
@@ -154,9 +176,9 @@ void Combat::handleRoll(int type, int roll)
 
     } else {
         if (phase != NO_ROLL) {
-            emit sendText("\n---------------------------------\nВы бросили не ту кость!(D"
-                          + QString::number(type) + ")\nВам нужен D" + QString::number(needRoll)
-                          + "\n---------------------------------\n");
+            emit sendText("\nВы бросили не ту кость!(D" + QString::number(type) + ")\nВам нужен D"
+                              + QString::number(needRoll) + "\n\n",
+                          Qt::darkYellow);
         }
     }
 }

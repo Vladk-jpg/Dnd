@@ -13,10 +13,10 @@ class Entity : public QObject
     Q_OBJECT
 public:
     Entity() = default;
-    Entity(QString, QString, int, int, int, int, int, int, int, int);
+    Entity(QString, QString, int, int, int, int, int, int, int, int, int, int);
 
     void setup(Entity *);
-    void setup(QString, QString, int, int, int, int, int, int, int, int);
+    void setup(QString, QString, int, int, int, int, int, int, int, int, int, int);
 
     void setDefence(int def);
     int getDefence();

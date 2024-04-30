@@ -6,6 +6,8 @@
 #include <QGraphicsTextItem>
 #include <QMainWindow>
 #include <QMessageBox>
+#include <QScrollBar>
+#include <QTextEdit>
 
 #include "armor.h"
 #include "combat.h"
@@ -39,7 +41,7 @@ private slots:
     void on_rollButton_clicked();
     void on_enterButton_clicked();
     void updateWindow();
-    void handleTextReceived(QString);
+    void handleTextReceived(QString, QColor);
     void handleEnemyRoll(int);
     void handleGameOver();
     void handleCreate();
@@ -47,6 +49,8 @@ private slots:
     void on_useButton_clicked();
 
     void on_infoButton_clicked();
+
+    void on_inputLine_returnPressed();
 
 private:
     Ui::MainWindow *ui;
@@ -63,6 +67,9 @@ private:
     QTimer timer;
     Combat *combat;
     bool isCreate = false;
+
+    QTextCharFormat format;
+    QTextCursor cursor;
 signals:
     void DiceRolled(int, int);
     void SendCommand(QString);

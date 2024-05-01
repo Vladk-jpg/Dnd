@@ -1,5 +1,86 @@
 [
     {
-        
+        "name": "Гоблин",
+        "race": "goblin",
+        "health": 7,
+        "str": -1,
+        "dex": 2,
+        "con": 0,
+        "intel": 0,
+        "wis": -1,
+        "cha": -1,
+        "danger": 1,
+        "defence": 15,
+        "damage": 6
+    },
+    {
+        "name": "Прохожий",
+        "race": "passer",
+        "health": 6,
+        "str": -1,
+        "dex": 1,
+        "con": 0,
+        "intel": 1,
+        "wis": 0,
+        "cha": 1,
+        "danger": 0,
+        "defence": 10,
+        "damage": 4
+    },
+    {
+        "name": "Бармен",
+        "race": "barman",
+        "health": 12,
+        "str": 1,
+        "dex": -2,
+        "con": 2,
+        "intel": -1,
+        "wis": 1,
+        "cha": 2,
+        "danger": 1,
+        "defence": 11,
+        "damage": 8
+    },
+    {
+        "name": "Пьяница",
+        "race": "drunk",
+        "health": 6,
+        "str": 0,
+        "dex": 0,
+        "con": 0,
+        "intel": -3,
+        "wis": 0,
+        "cha": 1,
+        "danger": 0,
+        "defence": 9,
+        "damage": 4
+    },
+    {
+        "name": "Мужчина",
+        "race": "man",
+        "health": 12,
+        "str": 2,
+        "dex": 2,
+        "con": -1,
+        "intel": 3,
+        "wis": 2,
+        "cha": 2,
+        "danger": 1,
+        "defence": 12,
+        "damage": 6
+    },
+    {
+        "name": "Леди",
+        "race": "lady",
+        "health": 7,
+        "str": 0,
+        "dex": 1,
+        "con": -2,
+        "intel": 1,
+        "wis": 1,
+        "cha": 4,
+        "danger": 0,
+        "defence": 8,
+        "damage": 4
     }
 ]

@@ -225,7 +225,6 @@ void MainWindow::updateWindow()
 
 void MainWindow::handleTextReceived(QString text, QColor color)
 {
-    qDebug() << color;
     format.setForeground(color);
     cursor.setCharFormat(format);
     cursor.insertText(text);

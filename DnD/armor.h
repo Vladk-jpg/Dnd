@@ -7,7 +7,7 @@ class Armor : public Item
 {
 public:
     Armor();
-    Armor(QString armorName, QString descrip, int def, int type);
+    Armor(int id, QString armorName, QString descrip, int def, int type);
     ~Armor() override = default;
     int getDef();
     void setDef(int);

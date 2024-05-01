@@ -37,6 +37,7 @@ public:
     void setHealth(int);
 
     int getDanger();
+    void setDanger(int dan);
 
     bool isAlive();
 

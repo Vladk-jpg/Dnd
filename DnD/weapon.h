@@ -7,7 +7,7 @@ class Weapon : public Item
 {
 public:
     Weapon();
-    Weapon(QString name, QString descrip, int damage, int type);
+    Weapon(int id, QString name, QString descrip, int damage, int type);
     ~Weapon() override = default;
 
     int getDam();

@@ -180,6 +180,11 @@ int Entity::getDanger()
     return danger;
 }
 
+void Entity::setDanger(int dan)
+{
+    danger = dan;
+}
+
 bool Entity::isAlive()
 {
     return health != 0;

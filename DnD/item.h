@@ -11,7 +11,7 @@ class Item : public QObject
     Q_OBJECT
 public:
     Item();
-    Item(QString name, QString description, int type);
+    Item(int id, QString name, QString description, int type);
     ~Item() override = default;
 
     QString getName();
@@ -23,6 +23,9 @@ public:
     void setType(int type);
     int getType();
 
+    void setId(int id);
+    int getId();
+
     virtual int use();
     void copy(Item &other);
 
@@ -30,6 +33,7 @@ protected:
     QString name;
     QString description;
     int type;
+    int id;
 };
 
 #endif // ITEM_H

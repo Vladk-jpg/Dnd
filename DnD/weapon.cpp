@@ -2,12 +2,13 @@
 
 Weapon::Weapon() = default;
 
-Weapon::Weapon(QString name, QString descrip, int damage, int type)
+Weapon::Weapon(int id, QString name, QString descrip, int damage, int type)
     : damage(damage)
 {
     this->name = name;
     description = descrip;
     this->type = type;
+    this->id = id;
 }
 
 int Weapon::getDam()
@@ -26,6 +27,7 @@ void Weapon::copy(Weapon &other)
     this->damage = other.damage;
     this->description = other.description;
     this->type = other.type;
+    this->id = id;
 }
 
 int Weapon::use()

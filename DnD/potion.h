@@ -7,10 +7,11 @@ class Potion : public Item
 {
 public:
     Potion();
-    Potion(QString name, QString descrip, int heal, int type);
+    Potion(int id, QString name, QString descrip, int heal, int type);
     ~Potion() override = default;
 
     int getHeal();
+    void setHeal(int);
 
     int use() override;
     void copy(Potion &other);

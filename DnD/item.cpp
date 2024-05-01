@@ -2,10 +2,11 @@
 
 Item::Item() = default;
 
-Item::Item(QString itemName, QString descrip, int type)
+Item::Item(int id, QString itemName, QString descrip, int type)
     : name(itemName)
     , description(descrip)
     , type(type)
+    , id(id)
 {}
 
 QString Item::getName()
@@ -38,6 +39,11 @@ int Item::getType()
     return type;
 }
 
+void Item::setId(int id)
+{
+    this->id = id;
+}
+
 int Item::use()
 {
     qDebug() << this->getName();
@@ -49,4 +55,5 @@ void Item::copy(Item &other)
     this->name = other.name;
     this->description = other.description;
     this->type = other.type;
+    this->id = other.id;
 }

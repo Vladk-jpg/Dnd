@@ -12,7 +12,6 @@ SOURCES += \
     armor.cpp \
     combat.cpp \
     creationform.cpp \
-    dialog.cpp \
     dice.cpp \
     entity.cpp \
     item.cpp \
@@ -31,7 +30,6 @@ HEADERS += \
     combat.h \
     constants.h \
     creationform.h \
-    dialog.h \
     dice.h \
     entity.h \
     item.h \

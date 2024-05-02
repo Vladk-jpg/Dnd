@@ -2,6 +2,7 @@
 #define PLAYER_H
 
 #include <QObject>
+#include <QRandomGenerator>
 #include <QVector>
 #include "constants.h"
 #include "entity.h"

@@ -43,13 +43,6 @@ public:
     World(Player *, Combat *);
     World();
 
-    Weapon *longSword = new Weapon(1, "Длинный меч", "Урон 1D8", D8, DAMAGE);
-
-    Armor *chain = new Armor(2, "Кольчуга", "Защита 16", 16, DEFENCE);
-    Armor *leatherArmor = new Armor(3, "Кожаная броня", "Защита 12", 12, DEFENCE);
-
-    Potion *SmallHealPotion = new Potion(4, "Малое лечебное зелье", "Восстанавливает 4 HP", 4, HEAL);
-
     Item *getItem(int id);
 
 private:
@@ -63,11 +56,16 @@ private:
     Player *player;
     Place *currentPlace;
     QString currentEntity;
+    int currentEvent;
+    Dialog::DialogNode *currentNode;
     Combat *combat;
 
     int state{CREATION};
+    bool isListen;
+    int needRoll;
 
     QMap<QString, Place *> parsePlaces(const QString &filePath);
+    QMap<int, Item *> parseItems(const QString &filePath);
     QMap<QString, Entity *> parseEntities(const QString &filePath);
     Dialog parseDialog(const QString &filePath);
 
@@ -77,14 +75,20 @@ private:
     void startDialog();
     void findPossibleWays();
     void checkWay(int id);
-    void chooseOption(QString option);
+    void chooseOption(QString option, bool VIP);
+
+    void startEvent(int event);
 
 public slots:
     void handleCommand(QString command);
     void handleFightEnd(QString name);
+    void handleRoll(int, int);
+
 signals:
     void sendText(QString, QColor);
     void createPlayer();
+    void blockInput(bool);
+    void gameOver();
 };
 
 #endif // WORLD_H

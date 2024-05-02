@@ -121,10 +121,13 @@ int Player::getMaxExp()
 void Player::useItem(int i)
 {
     if (i < inventory.size()) {
-        if (inventory[i]->getType() == DAMAGE) {
+        if (inventory[i]->getType() == DAMAGE || inventory[i]->getType() == SPELL) {
             damage = inventory[i]->use();
         } else if (inventory[i]->getType() == DEFENCE) {
             defence = inventory[i]->use();
+            if (defence <= 15) {
+                defence += dexterity;
+            }
         } else if (inventory[i]->getType() == HEAL) {
             health += inventory[i]->use();
             if (health > maxHealth) {
@@ -147,6 +150,8 @@ void Player::addExp(int incr)
 void Player::handleMod(int mod)
 {
     setMod(mod, getMod(mod) + 1);
+    maxHealth += QRandomGenerator::global()->bounded(1, healDice + 1);
+    health = maxHealth;
     emit sendText("Ваша характеристика №" + QString::number(mod + 1) + " повысилась на 1",
                   Qt::darkGreen);
 }

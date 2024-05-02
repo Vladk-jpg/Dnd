@@ -6,7 +6,6 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     , menu(new Menu)
-    , form(new CreationForm)
     , dice(new Dice)
     , scene(new QGraphicsScene)
 {
@@ -15,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
     player = new Player;
     combat = new Combat(player);
     world = new World(player, combat);
+    form = new CreationForm(world);
 
     ui->background->setScaledContents(true);
     ui->background->resize(size());
@@ -39,6 +39,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(this, &MainWindow::SendCommand, world, &World::handleCommand);
     connect(world, &World::sendText, this, &MainWindow::handleTextReceived);
     connect(world, &World::createPlayer, this, &MainWindow::handleCreate);
+    connect(world, &World::blockInput, this, &MainWindow::handleBlockInput);
+    connect(this, &MainWindow::DiceRolled, world, &World::handleRoll);
 
     format.setForeground(QColor("black"));
     cursor.insertText("Добро пожаловать в увлекательный мир \"Dungeons & Data\"!\nСперва давайте "
@@ -254,6 +256,11 @@ void MainWindow::handleCreate()
 {
     form->show();
     this->setEnabled(false);
+}
+
+void MainWindow::handleBlockInput(bool state)
+{
+    ui->inputLine->setReadOnly(state);
 }
 
 void MainWindow::on_useButton_clicked()

@@ -45,6 +45,7 @@ private slots:
     void handleEnemyRoll(int);
     void handleGameOver();
     void handleCreate();
+    void handleBlockInput(bool);
 
     void on_useButton_clicked();
 

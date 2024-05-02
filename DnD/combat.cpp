@@ -33,7 +33,7 @@ int Combat::bonus()
         return player->getMod(INTELLEGENCE);
     } else if (player->getGameClass() == "Плут") {
         return player->getMod(DEXTERITY);
-    } else if (player->getGameClass() == "Друид") {
+    } else if (player->getGameClass() == "Друид" || player->getGameClass() == "Монах") {
         return player->getMod(WISDOM);
     } else {
         return 0;

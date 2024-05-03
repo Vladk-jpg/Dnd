@@ -6,7 +6,6 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     , menu(new Menu)
-    , form(new CreationForm)
     , dice(new Dice)
     , scene(new QGraphicsScene)
 {
@@ -15,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
     player = new Player;
     combat = new Combat(player);
     world = new World(player, combat);
+    form = new CreationForm(world);
 
     ui->background->setScaledContents(true);
     ui->background->resize(size());
@@ -39,10 +39,13 @@ MainWindow::MainWindow(QWidget *parent)
     connect(this, &MainWindow::SendCommand, world, &World::handleCommand);
     connect(world, &World::sendText, this, &MainWindow::handleTextReceived);
     connect(world, &World::createPlayer, this, &MainWindow::handleCreate);
+    connect(world, &World::blockInput, this, &MainWindow::handleBlockInput);
+    connect(this, &MainWindow::DiceRolled, world, &World::handleRoll);
 
     format.setForeground(QColor("black"));
     cursor.insertText("Добро пожаловать в увлекательный мир \"Dungeons & Data\"!\nСперва давайте "
-                      "создадим персонажа:\nВведите \"/create\"\n");
+                      "создадим персонажа, а затем окунемся в этот неповторимый фентези "
+                      "мир:\nВведите \"/create\"\n");
 }
 
 MainWindow::~MainWindow()
@@ -146,6 +149,17 @@ void MainWindow::handlePlayerCreate(Player *newPlayer)
     format.setForeground(QColor(Qt::darkGreen));
     cursor.setCharFormat(format);
     cursor.insertText("Вы благополучно создали персонажа\n");
+    format.setForeground(QColor(Qt::black));
+    cursor.setCharFormat(format);
+    cursor.insertText(
+        "В далеких землях Понии, где магия пронизывает воздух и приключения ждут за каждым "
+        "поворотом, древние силы снова пробуждаются. Земли трясутся под угрозой злодеев, "
+        "темные тени нависают над миром, а герои — как новые, так и старые — снова выбвигаются "
+        "в дорогу, чтобы противостоять этому злу. Ваше приключение начинается здесь, в мире, где "
+        "каждый выбор имеет значение, а каждый шаг ведет к новым опасностям и возможностям. "
+        "Приготовься, путник, тебя ждет удивительное путешествие, полное тайн, битв и "
+        "волшебства.\n");
+    emit SendCommand("/i");
     ui->dialog->ensureCursorVisible();
 }
 
@@ -206,7 +220,7 @@ void MainWindow::updateWindow()
     ui->name->setText(player->getName());
     ui->gameClass->setText(player->getGameClass());
     ui->race->setText(player->getRace());
-    ui->damage->setText("Урон: D" + QString::number(player->getDamage()));
+    ui->damage->setText("D" + QString::number(player->getDamage()));
 
     ui->stats->setColumnCount(1);
     ui->stats->setItem(0, 0, new QTableWidgetItem(QString::number(player->getMod(STRENGTH))));
@@ -254,6 +268,11 @@ void MainWindow::handleCreate()
 {
     form->show();
     this->setEnabled(false);
+}
+
+void MainWindow::handleBlockInput(bool state)
+{
+    ui->inputLine->setReadOnly(state);
 }
 
 void MainWindow::on_useButton_clicked()

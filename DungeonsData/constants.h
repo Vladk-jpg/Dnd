@@ -3,9 +3,14 @@
 
 enum modificators { STRENGTH, DEXTERITY, CONSTITUTION, INTELLEGENCE, WISDOM, CHARISMA };
 
-enum gameStates { CREATION, FIGHT, DIALOG, FREE };
+enum gameStates {
+    CREATION,
+    FIGHT,
+    DIALOG,
+    FREE,
+};
 
-enum itemTypes { HEAL, DAMAGE, DEFENCE, TRINKET };
+enum itemTypes { HEAL, DAMAGE, DEFENCE, TRINKET, SPELL };
 
 enum battleRolls { INITIATIVE_ROLL, HIT_ROLL, DAMAGE_ROLL, NO_ROLL };
 
@@ -20,8 +25,8 @@ enum events {
     WISDOM_EVENT,
     CHARISMA_EVENT,
     FIGHT_EVENT,
-    TRAP_EVENT,
-    PRICE_EVENT,
+    TRAP_EVENT, //Нельзя использовать в диалогах
+    PRIZE_EVENT,
     END_EVENT
 };
 
@@ -35,5 +40,15 @@ const int D12 = 12;
 const int D20 = 20;
 const int MAX_LVL = 20;
 const int DEF_EXP = 300;
+const int ARMOR_ID_START = 1;
+const int ARMOR_ID_FINISH = 10;
+const int WEAPON_ID_START = 11;
+const int WEAPON_ID_FINISH = 35;
+const int SPELL_ID_START = 26;
+const int SPELL_ID_FINISH = 35;
+const int POTION_ID_START = 36;
+const int POTION_ID_FINISH = 40;
+const int TRINKET_ID_START = 41;
+const int TRINKET_ID_FINISH = 45;
 
 #endif // CONSTANTS_H

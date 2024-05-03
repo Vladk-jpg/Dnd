@@ -26,6 +26,16 @@ Item *World::getItem(int id)
     }
 }
 
+void World::clearWorld()
+{
+    currentPlace = places["Распутье"];
+    for (auto &value : defeated) {
+        value = false;
+    }
+    isListen = false;
+    state = CREATION;
+}
+
 void World::goToPlace(QString place)
 {
     bool isNumber = false;
@@ -37,29 +47,56 @@ void World::goToPlace(QString place)
     if (isExists) {
         place = currentPlace->exits[var - 1];
         if (places[place]->lvl <= player->getLvl()) {
-            if (places[place]->type == ENVIRONMENT) {
-                //какое-то случайное событие
-                //startEvent(TRAP_EVENT);
-            }
             currentPlace = places[place];
-            emit sendText(currentPlace->description + "\n", Qt::black);
-            QString info;
-            emit sendText("Дороги в места:\n", Qt::darkBlue);
-            for (int i = 0; i < currentPlace->exits.size(); i++) {
-                info.append(QString::number(i + 1) + " " + currentPlace->exits[i] + " (Уровень "
-                            + QString::number(places[currentPlace->exits[i]]->lvl) + ")\n");
-            }
-            emit sendText(info, Qt::black);
-            info.clear();
-            if (currentPlace->type != ENVIRONMENT) {
+
+            if (places[place]->type != ENVIRONMENT) {
+                emit sendText(currentPlace->description + "\n", Qt::black);
+                QString info;
+                emit sendText("Дороги в места:\n", Qt::darkBlue);
+                for (int i = 0; i < currentPlace->exits.size(); i++) {
+                    info.append(QString::number(i + 1) + " " + currentPlace->exits[i] + " (Уровень "
+                                + QString::number(places[currentPlace->exits[i]]->lvl) + ")\n");
+                }
+                emit sendText(info, Qt::black);
+                info.clear();
                 emit sendText("Список NPC:\n", Qt::darkBlue);
                 for (int i = 0; i < currentPlace->npcs.size(); i++) {
                     if (!defeated[currentPlace->npcs[i]]) {
                         info.append(QString::number(i + 1) + " " + currentPlace->npcs[i] + "\n");
                     }
                 }
+                emit sendText(info, Qt::black);
+            } else {
+                int randNum = QRandomGenerator::global()->bounded(0, 2);
+                if (randNum) {
+                    startEvent(TRAP_EVENT);
+                } else {
+                    QString npc;
+                    bool flag = true;
+                    for (int i = 0; i < currentPlace->npcs.size(); i++) {
+                        npc = currentPlace->npcs[i];
+                        if (!defeated[npc]) {
+                            emit blockInput(true);
+                            combat->start(entities[npc]);
+                            state = FIGHT;
+                            flag = false;
+                            break;
+                        }
+                    }
+                    if (flag) {
+                        emit sendText(currentPlace->description + "\n", Qt::black);
+                        QString info;
+                        emit sendText("Дороги в места:\n", Qt::darkBlue);
+                        for (int i = 0; i < currentPlace->exits.size(); i++) {
+                            info.append(
+                                QString::number(i + 1) + " " + currentPlace->exits[i] + " (Уровень "
+                                + QString::number(places[currentPlace->exits[i]]->lvl) + ")\n");
+                        }
+                        emit sendText(info, Qt::black);
+                    }
+                }
             }
-            emit sendText(info, Qt::black);
+
         } else {
             emit sendText("У вас недостаточно уровней, чтобы добраться до этого места\n",
                           Qt::darkYellow);
@@ -89,7 +126,7 @@ void World::talkToNPC(QString npc)
             emit sendText(npc + " больше нет\n", Qt::black);
         }
     } else {
-        emit sendText("Ведите пожалуйста число соответствующее НПС\n", Qt::red);
+        emit sendText("Такого NPC не существует или вы не можете до него добраться\n", Qt::red);
     }
 }
 
@@ -223,10 +260,14 @@ void World::startEvent(int event)
         if (state == DIALOG) {
             currentNode->was = true;
             player->inventory.push_back(items[randomNum]);
+
             emit sendText(currentPlace->npcs[currentEntity.toInt()] + ":\n", Qt::darkBlue);
             emit sendText(currentNode->dialog + '\n', Qt::black);
             emit sendText("Вы получили предмет ", Qt::black);
             emit sendText(items[randomNum]->getName() + '\n', Qt::darkGreen);
+            player->addExp(200);
+            emit sendText("Вы получили ", Qt::black);
+            emit sendText("200 опыта\n", Qt::magenta);
 
             findPossibleWays();
             if (possibleWays.empty()) {
@@ -582,6 +623,7 @@ void World::handleCommand(QString command)
 
         } else if (command.mid(0, 4) == "/end") {
             state = FREE;
+            defeated[currentPlace->npcs[currentEntity.toInt()]] = true;
             emit sendText("Диолог закончился\n", Qt::black);
 
         } else if (command.mid(0, 2) == "/i") {
@@ -642,6 +684,7 @@ void World::handleRoll(int type, int roll)
                     }
                     emit blockInput(false);
                     isListen = false;
+                    handleCommand("/i"); //ПЛОХАЯ ПРАКТИКА
                 }
             }
         } else {

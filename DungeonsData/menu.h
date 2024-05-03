@@ -21,10 +21,12 @@ private:
 signals:
     void Close();
     void Continue();
+    void NewGame();
 
 private slots:
     void on_pushButton_close_clicked();
     void on_pushButton_continue_clicked();
+    void on_pushButton_3_clicked();
 };
 
 #endif // MENU_H

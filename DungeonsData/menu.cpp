@@ -28,3 +28,8 @@ void Menu::on_pushButton_continue_clicked()
 {
     emit Continue();
 }
+
+void Menu::on_pushButton_3_clicked()
+{
+    emit NewGame();
+}

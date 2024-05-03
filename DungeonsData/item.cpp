@@ -44,6 +44,11 @@ void Item::setId(int id)
     this->id = id;
 }
 
+int Item::getId()
+{
+    return id;
+}
+
 int Item::use()
 {
     qDebug() << this->getName();

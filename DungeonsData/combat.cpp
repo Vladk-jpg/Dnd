@@ -33,7 +33,7 @@ int Combat::bonus()
         return player->getMod(INTELLEGENCE);
     } else if (player->getGameClass() == "Плут") {
         return player->getMod(DEXTERITY);
-    } else if (player->getGameClass() == "Друид") {
+    } else if (player->getGameClass() == "Друид" || player->getGameClass() == "Монах") {
         return player->getMod(WISDOM);
     } else {
         return 0;
@@ -129,7 +129,7 @@ void Combat::handleRoll(int type, int roll)
 
                 if (!enemy->isAlive()) {
                     phase = NO_ROLL;
-                    emit sendText("\nПоздравляю, вы победили ", Qt::darkGreen);
+                    emit sendText("\nПоздравляю, вы победили ", Qt::black);
                     //+  + "!");
                     emit sendText(enemy->getName(), Qt::red);
                     emit sendText(" !\n", Qt::darkGreen);
@@ -139,8 +139,6 @@ void Combat::handleRoll(int type, int roll)
                     emit sendText(QString::number(enemy->getDanger() * 200) + " опыта\n",
                                   Qt::magenta);
                     emit fightEnd(enemy->getName());
-
-                    //дать рандомную награду
 
                 } else {
                     phase = HIT_ROLL;

@@ -18,7 +18,7 @@ class CreationForm : public QWidget
     Q_OBJECT
 
 public:
-    explicit CreationForm(QWidget *parent = nullptr);
+    explicit CreationForm(World *world, QWidget *parent = nullptr);
     ~CreationForm() override;
 
 private slots:

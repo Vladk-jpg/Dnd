@@ -28,8 +28,8 @@
         "damage": 4
     },
     {
-        "name": "Бармен",
-        "race": "barman",
+        "name": "Корчмарь",
+        "race": "innkeeper",
         "health": 12,
         "str": 1,
         "dex": -2,

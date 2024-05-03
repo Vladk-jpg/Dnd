@@ -54,6 +54,8 @@ void Player::setup(Player *other)
     inventory = other->inventory;
     defence = other->defence;
     damage = other->damage;
+    exp = 0;
+    lvl = 1;
 
     int var = DEF_EXP;
     for (int i = 0; i < MAX_LVL; i++) {
@@ -85,6 +87,8 @@ void Player::setup(QString name,
     this->health = health;
     healDice = health - con;
     maxHealth = health;
+    exp = 0;
+    lvl = 1;
 
     int var = DEF_EXP;
     for (int i = 0; i < MAX_LVL; i++) {

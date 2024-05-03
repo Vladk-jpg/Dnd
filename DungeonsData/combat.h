@@ -14,6 +14,7 @@ public:
     Combat(Player *);
 
     void start(Entity *);
+    void clearInfo();
 
 private:
     Player *player;

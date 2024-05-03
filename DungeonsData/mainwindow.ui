@@ -1023,7 +1023,7 @@ color: white;</string>
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QTextEdit" name="dialog_2">
+   <widget class="QTextEdit" name="commands">
     <property name="geometry">
      <rect>
       <x>1240</x>
@@ -1169,7 +1169,7 @@ border-radius: 5px;</string>
    <zorder>race</zorder>
    <zorder>gameClass</zorder>
    <zorder>Title</zorder>
-   <zorder>dialog_2</zorder>
+   <zorder>commands</zorder>
    <zorder>label_9</zorder>
    <zorder>label_6</zorder>
    <zorder>label_7</zorder>

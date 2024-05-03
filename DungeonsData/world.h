@@ -44,6 +44,7 @@ public:
     World();
 
     Item *getItem(int id);
+    void clearWorld();
 
 private:
     Dialog dialog;

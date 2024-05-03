@@ -21,6 +21,11 @@ void Combat::start(Entity *entity)
     round = 1;
 }
 
+void Combat::clearInfo()
+{
+    phase = NO_ROLL;
+}
+
 int Combat::bonus()
 {
     if (player->getGameClass() == "Варвар" || player->getGameClass() == "Воин"

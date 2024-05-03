@@ -35,6 +35,7 @@ public:
 private slots:
     void closeWindow();
     void closeMenu();
+    void newGame();
     void handleDiceRoll(int, int, bool);
     void handlePlayerCreate(Player *);
     void on_menuButton_clicked();
@@ -63,8 +64,6 @@ private:
     QPair<int, int> currRoll;
     QGraphicsScene *scene;
     Player *player;
-    bool isFight = false;
-    int gameState{CREATION};
     QTimer timer;
     Combat *combat;
     bool isCreate = false;

@@ -21,6 +21,7 @@ void CreationForm::on_createButton_clicked()
     QString race = ui->race->currentText();
     QString gameClass = ui->gameClass->currentText();
     int str = 0, dex = 0, con = 0, intel = 0, wis = 0, cha = 0, health = 0;
+    player->inventory.clear();
 
     str = QRandomGenerator::global()->bounded(-2, 3);
     dex = QRandomGenerator::global()->bounded(-2, 3);

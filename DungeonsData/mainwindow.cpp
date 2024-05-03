@@ -29,6 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(menu, &Menu::Close, this, &MainWindow::closeWindow);
     connect(menu, &Menu::Continue, this, &MainWindow::closeMenu);
+    connect(menu, &Menu::NewGame, this, &MainWindow::newGame);
     connect(dice, &Dice::rolled, this, &MainWindow::handleDiceRoll);
     connect(form, &CreationForm::Completed, this, &MainWindow::handlePlayerCreate);
     connect(combat, &Combat::sendText, this, &MainWindow::handleTextReceived);
@@ -41,6 +42,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(world, &World::createPlayer, this, &MainWindow::handleCreate);
     connect(world, &World::blockInput, this, &MainWindow::handleBlockInput);
     connect(this, &MainWindow::DiceRolled, world, &World::handleRoll);
+    connect(world, &World::gameOver, this, &MainWindow::handleGameOver);
 
     format.setForeground(QColor("black"));
     cursor.insertText("Добро пожаловать в увлекательный мир \"Dungeons & Data\"!\nСперва давайте "
@@ -63,6 +65,27 @@ void MainWindow::closeMenu()
 {
     menu->close();
     this->setEnabled(true);
+}
+
+void MainWindow::newGame()
+{
+    menu->close();
+    this->setEnabled(true);
+
+    world->clearWorld();
+    combat->clearInfo();
+    ui->dialog->clear();
+    canRoll = true;
+    isCreate = false;
+    ui->inputLine->setReadOnly(false);
+
+    format.setForeground(Qt::black);
+    cursor.setCharFormat(format);
+    cursor.insertText("(Окно обновится после создания персонжа)\n");
+    cursor.insertText("Добро пожаловать в увлекательный мир \"Dungeons & Data\"!\nСперва давайте "
+                      "создадим персонажа, а затем окунемся в этот неповторимый фентези "
+                      "мир:\nВведите \"/create\"\n");
+    updateWindow();
 }
 
 void MainWindow::handleDiceRoll(int type, int num, bool isLast)
@@ -262,6 +285,8 @@ void MainWindow::handleGameOver()
     cursor.setCharFormat(format);
     cursor.insertText("\nИгра окончена\n");
     ui->dialog->ensureCursorVisible();
+    ui->inputLine->setReadOnly(true);
+    cursor.insertText("\nМожете начать заново, выбрав соответствующую опцию в меню\n");
 }
 
 void MainWindow::handleCreate()

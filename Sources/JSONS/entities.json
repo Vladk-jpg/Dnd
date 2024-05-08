@@ -93,7 +93,7 @@
         "intel": -3,
         "wis": 0,
         "cha": 1,
-        "danger": 0,
+        "danger": 1,
         "defence": 9,
         "damage": 4
     },

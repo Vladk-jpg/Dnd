@@ -284,9 +284,8 @@ void MainWindow::handleGameOver()
     format.setForeground(QColor(Qt::red));
     cursor.setCharFormat(format);
     cursor.insertText("\nИгра окончена\n");
-    ui->dialog->ensureCursorVisible();
-    ui->inputLine->setReadOnly(true);
-    cursor.insertText("\nМожете начать заново, выбрав соответствующую опцию в меню\n");
+    menu->show();
+    this->setEnabled(false);
 }
 
 void MainWindow::handleCreate()

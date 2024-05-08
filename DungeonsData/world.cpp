@@ -293,7 +293,7 @@ void World::startEvent(int event)
         defeated[currentPlace->npcs[currentEntity.toInt()]] = true;
         emit sendText(currentPlace->npcs[currentEntity.toInt()] + ":\n", Qt::darkBlue);
         emit sendText(currentNode->dialog + '\n', Qt::black);
-        emit sendText("Диолог закончился\n", Qt::black);
+        emit sendText("Диолог закончился\n", Qt::darkRed);
         emit blockInput(false);
 
     } else if (event == STRENGTH_EVENT) {

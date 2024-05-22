@@ -515,7 +515,8 @@ void World::handleCommand(QString command)
             QString place = command.mid(4);
             goToPlace(place);
 
-        } else if (command == "/info") {
+        } else if (command == "/i") {
+            emit sendText(currentPlace->description + "\n", Qt::black);
             QString info = "Список мест, в которые можно пойти:\n";
             for (int i = 0; i < currentPlace->exits.size(); i++) {
                 info.append(QString::number(i + 1) + " " + currentPlace->exits[i] + " (Уровень "
@@ -531,12 +532,12 @@ void World::handleCommand(QString command)
             }
             emit sendText(info, Qt::black);
 
-        } else if (command.mid(0, 5) == "/talk") {
-            QString npc = command.mid(6);
+        } else if (command.mid(0, 2) == "/t") {
+            QString npc = command.mid(3);
             talkToNPC(npc);
 
-        } else if (command.mid(0, 6) == "/fight") {
-            QString npc = command.mid(7);
+        } else if (command.mid(0, 2) == "/f") {
+            QString npc = command.mid(3);
             fightToNPC(npc);
 
         } else if (command == "/create") {
@@ -554,11 +555,11 @@ void World::handleCommand(QString command)
             emit sendText("Команда не найдена\n", Qt::red);
         }
     } else if (state == DIALOG) {
-        if (command.mid(0, 7) == "/choose") {
-            QString option = command.mid(8);
+        if (command.mid(0, 2) == "/c") {
+            QString option = command.mid(3);
             chooseOption(option, false);
 
-        } else if (command.mid(0, 6) == "/fight") {
+        } else if (command.mid(0, 2) == "/f") {
             state = FIGHT;
             fightToNPC(QString::number(currentEntity.toInt() + 1));
 
